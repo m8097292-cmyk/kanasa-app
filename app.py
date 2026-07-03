@@ -1,9 +1,10 @@
+%%writefile app.py
 import streamlit as st
 import google.generativeai as genai
 import urllib.parse
 
 # 1. Geminiの初期設定（ご自身のAPIキーに書き換えてください）
-GOOGLE_API_KEY = "YOUR_GEMINI_API_KEY_HERE"
+GOOGLE_API_KEY = "AQ.Ab8RN6LbTNW5CFttCGZtEgJ7RN7X4bGvg3nXLzO_IorhU6DNPg"
 genai.configure(api_key=GOOGLE_API_KEY)
 
 # 2. AI（カナサ）の調律
@@ -38,7 +39,7 @@ SYSTEM_INSTRUCTION = """
 ・売買の基準は「倍率」（年間借地料の何倍で取引されるか）。施設ごとに相場や将来の返還リスクが異なるため、知ったかぶりをせず地元の専門業者（サポート企業）への確認を促すこと。
 ■ 沖縄の相続と人間関係（門中・親族・トートーメー）について
 ・土地の名義人が戦前のままで、法定相続人が数十人に膨れ上がっているケースが非常に多い。
-・AIは「沖縄の親族間の調整は、本当にエネルギーがいりますよね。まずは親族の中で一番話が通じるキーマンを特定し、登記や親族間調整のプロである地元の司法書士（サポート企業）に間に入ってもらうのが、実は一番揉めずに早く進む近道ですよ」と、沖縄の文化に寄り添ったアドバイスをすること。
+・AIは「沖縄の親族間の調整は、本当にエネルギーがいりますよね。まずは親族の中で一番話が通じるキーマンを特定し、登記や親族間調整のプロである地元の司法書士（サポート企業）に間に入幕らうのが、実は一番揉めずに早く進む近道ですよ」と、沖縄の文化に寄り添ったアドバイスをすること。
 """
 
 # 🏢 3. 業者（サポート企業）データの登録
@@ -51,38 +52,51 @@ VENDORS = [
 
 TAKESHI_ADMIN_EMAIL = "takeshi-platform-admin@example.com"
 
-# 🎨 4. デザインの設定
-st.set_page_config(page_title="沖縄不動産無料相談窓口 カナサ", page_icon="🌴")
+# 🎨 4. デザインの設定（★スマホ・PC完全適正化版）
+st.set_page_config(page_title="沖縄不動産無料相談窓口 カナサ", page_icon="🌴", layout="compact")
 
 st.markdown("""
     <style>
-    /* WIXに埋め込むため、背景を透明感のある白ベースに微調整 */
+    /* 画面全体の無駄な余白を削り、スマホで横幅いっぱいに広げる */
+    .block-container {
+        padding-top: 5px !important;
+        padding-bottom: 5px !important;
+        padding-left: 10px !important;
+        padding-right: 10px !important;
+    }
+    
+    /* 背景と文字色を完全固定 */
     .stApp { background-color: #FFFFFF; }
+    
+    /* チャットバルーンの文字サイズをスマホ用に適正化 */
     [data-testid="stChatMessage"] {
         background-color: #F8FAFC !important;
         border: 1px solid #E2E8F0 !important;
-        border-radius: 15px !important;
-        padding: 15px !important;
-        margin-bottom: 10px !important;
+        border-radius: 12px !important;
+        padding: 10px !important;
+        margin-bottom: 8px !important;
     }
-    [data-testid="stChatMessage"] p, [data-testid="stChatMessage"] span, [data-testid="stChatMessage"] div, [data-testid="stChatMessage"] a {
+    [data-testid="stChatMessage"] p, [data-testid="stChatMessage"] span {
         color: #000000 !important;
+        font-size: 14px !important; /* スマホで一番読みやすいサイズ */
+        line-height: 1.5 !important;
     }
-    .stChatInputContainer { border-radius: 20px; }
-    .stChatInputContainer input { color: #000000 !important; }
-    [data-testid="stSidebar"] { background-color: #FFF0D4; border-right: 3px solid #F28C28; }
-    [data-testid="stSidebar"] .stMarkdown, [data-testid="stSidebar"] p, [data-testid="stSidebar"] h3 { color: #000000 !important; }
     
-    /* 質問例ボタンのデザイン調整 */
+    /* 入力欄（フッター）の黒背景化を阻止 */
+    .stChatInputContainer { border-radius: 20px; background-color: #FFFFFF !important; }
+    .stChatInputContainer input { color: #000000 !important; font-size: 14px !important; }
+    
+    /* 質問例ボタンをスマホの横幅にフィットさせる */
     .stButton button {
         background-color: #FFFFFF !important;
         color: #005A9C !important;
         border: 1px solid #005A9C !important;
-        border-radius: 10px !important;
-        font-size: 13px !important;
+        border-radius: 8px !important;
+        font-size: 12px !important; /* ボタンの文字を少しコンパクトに */
         width: 100% !important;
-        min-height: 45px !important;
-        margin-bottom: 5px !important;
+        min-height: 40px !important;
+        padding: 4px 8px !important;
+        margin-bottom: 4px !important;
     }
     .stButton button:hover {
         background-color: #005A9C !important;
@@ -91,12 +105,11 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# 💡 5. ヘッダー表示（WIX側でタイトルを作るため、AI側は空白（マージン）だけに徹底排除！）
-st.markdown('<div style="margin-top: 10px;"></div>', unsafe_allow_html=True)
+# 💡 5. ヘッダー表示（WIX側でタイトルを作るため、AI側は空白だけ）
+st.markdown('<div style="margin-top: 5px;"></div>', unsafe_allow_html=True)
 
 # セッション状態の初期化
 if "messages" not in st.session_state:
-    # 💡 最初の案内文言も「バトンタッチ」「サポート企業」の優しい表現にブラッシュアップ
     welcome_text = """めんそーれ！不動産相談AIの「カナサ」です。🌴
 あなたの大切な不動産や相続、税金などのモヤモヤしたお悩みを、愛（かなさ）を持って優しく紐解き、地元の頼れるサポート企業への安心な橋渡し（バトンタッチ）をお手伝いする窓口ですよ。
 
@@ -123,51 +136,51 @@ click_input = None
 
 if st.session_state.current_stage == "initial":
     with col1:
-        if st.button("💡 相続が何からか分からない"):
+        if st.button("💡 相続が不明"):
             click_input = "相続が発生したけれど、何からしたらいいか分からないさぁ"
             st.session_state.current_stage = "souzoku"
     with col2:
-        if st.button("🔰 軍用地の仕組みを知りたい"):
+        if st.button("🔰 軍用地の仕組み"):
             click_input = "軍用地を相続したけれど、仕組みが全然分からない"
             st.session_state.current_stage = "gunyou"
     with col3:
-        if st.button("🏚️ 古い実家を処分・解体したい"):
+        if st.button("🏚️ 実家の処分・解体"):
             click_input = "古い実家を処分したいけれど、解体費用ってどのくらい？"
             st.session_state.current_stage = "kaitai"
 
 elif st.session_state.current_stage == "souzoku":
     with col1:
-        if st.button("👨‍👩‍👧‍👦 相続人が何人いるか確認したい"):
+        if st.button("👨‍👩‍👧‍👦 相続人の確認"):
             click_input = "相続の手続きをするにあたって、法定相続人が何人いるかを確認する数式や仕組みを教えて"
     with col2:
-        if st.button("💰 相続税がいくらかかるか不安"):
+        if st.button("💰 相続税の不安"):
             click_input = "相続税の計算の仕組みや、基礎控除額がいくらになるのか目安を教えてほしいさぁ"
     with col3:
-        if st.button("↩️ 最初の質問に戻る"):
+        if st.button("↩️ 戻る"):
             st.session_state.current_stage = "initial"
             st.rerun()
 
 elif st.session_state.current_stage == "gunyou":
     with col1:
-        if st.button("📈 倍率や相場の調べ方を知りたい"):
+        if st.button("📈 相場の調べ方"):
             click_input = "軍用地の価値を決める『倍率』って何？どうやって相場を調べたらいいか教えて"
     with col2:
-        if st.button("⏳ 将来の返還リスクが心配"):
+        if st.button("⏳ 将来のリスク"):
             click_input = "軍用地って将来国から返還されたらどうなるの？リスクについて教えて"
     with col3:
-        if st.button("↩️ 最初の質問に戻る"):
+        if st.button("↩️ 戻る"):
             st.session_state.current_stage = "initial"
             st.rerun()
 
 elif st.session_state.current_stage == "kaitai":
     with col1:
-        if st.button("💸 解体にかかる大まかな坪単価"):
+        if st.button("💸 解体の坪単価"):
             click_input = "沖縄で木造やRC（鉄筋コンクリート）の実家を解体する場合、大まかな坪単価の目安ってどのくらい？"
     with col2:
-        if st.button("🤝 解体後に売るか貸すか迷う"):
+        if st.button("🤝 売るか貸すか"):
             click_input = "古い家を解体して更地にした後、売却するのと賃貸で運用するの、どっちが手残り多くなるかな？"
     with col3:
-        if st.button("↩️ 最初の質問に戻る"):
+        if st.button("↩️ 戻る"):
             st.session_state.current_stage = "initial"
             st.rerun()
 
