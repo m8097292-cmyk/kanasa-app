@@ -53,7 +53,7 @@ VENDORS = [
 TAKESHI_ADMIN_EMAIL = "takeshi-platform-admin@example.com"
 
 # 🎨 4. デザインの設定（★スマホ・PC完全適正化版）
-st.set_page_config(page_title="沖縄不動産無料相談窓口 カナサ", page_icon="🌴", layout="compact")
+st.set_page_config(page_title="沖縄不動産無料相談窓口 カナサ", page_icon="🌴", layout="wide")
 
 st.markdown("""
     <style>
