@@ -1,122 +1,62 @@
-
 import streamlit as st
 import google.generativeai as genai
 import urllib.parse
+import csv
+import os
 
 # 1. Geminiの初期設定（ご自身のAPIキーに書き換えてください）
-GOOGLE_API_KEY = "YOUR_GEMINI_API_KEY_HERE"
+GOOGLE_API_KEY = "AQ.Ab8RN6LbTNW5CFttCGZtEgJ7RN7X4bGvg3nXLzO_IorhU6DNPg"
 genai.configure(api_key=GOOGLE_API_KEY)
 
-# 2. AI（カナサ）の調律
-SYSTEM_INSTRUCTION = """
-あなたは、沖縄不動産無料相談窓口の公式AI「カナサ」です。沖縄の方言の「愛（かなさ）」と「AI」を掛け合わせて名付けられました。
-沖縄の不動産や土地（軍用地含む）、相続、税金事情に日本一精通した、温厚で親身になって寄り添う「無料AI相談員」として振る舞ってください。
+# 📂 外部ファイル（prompt.txt）からカナサの性格を読み込む仕組み
+def load_prompt():
+    if os.path.exists("prompt.txt"):
+        with open("prompt.txt", "r", encoding="utf-8") as f:
+            return f.read()
+    return "あなたは優秀なAIアシスタントです。" # 万が一ファイルがない場合の保険
 
-相談者は強引な営業や騙されること、そして親族間のトラブルに深く傷つき、不安を抱えています。あなたの目的は、相談者の不安を「愛（かなさ）」を持って優しく傾聴し、地元の心強いサポート企業（専門家）へ優しく橋渡し（バトンタッチ）をすることです。
+SYSTEM_INSTRUCTION = load_prompt()
 
-以下の【絶対遵守ルール】と【沖縄不動産・独自知識データベース】を徹底的に読み込み、100%守って会話してください。
+# 📊 外部ファイル（vendors.csv）から業者リストを読み込む仕組み
+def load_vendors():
+    vendors = []
+    if os.path.exists("vendors.csv"):
+        with open("vendors.csv", "r", encoding="utf-8") as f:
+            reader = csv.DictReader(f)
+            for row in reader:
+                vendors.append(row)
+    return vendors
 
-【絶対遵守ルール（法律の防衛線）】
-1. 一人称は「不動産相談AIのカナサ」と名乗ってください。
-2. 相談者のプライバシーを守るため、名前や電話番号、詳細な地番などは「絶対にこのチャットでは入力しないでくださいね」と最初に、あるいは自然に伝えてください。
-
-3. 【★最重要：一般論の解説 ＋ 相談者の背中を押す現場感覚のアドバイス】
-   相談者から税金や売却額の質問が出たら、一般的な数式や税率（長期譲渡約20%、短期譲渡約40%）を使って、大まかな概算（目安）を積極的に計算して提示してください。
-   
-   そして、数字を出した直後に、必ず以下の【経営者直伝の温かいアドバイス】をカナサの言葉（優しい口調）で伝えて、相談者の不安を和らげ、前向きな気持ちにさせてあげてください。
-
-   【経営者直伝の温かいアドバイス】
-   「実際に〇〇万円くらいかかりそう、と言われるとびっくりしますよね。普段の生活からすると本当にすごい出費に感じてしまうものです。
-   でもね、一番大切なのは『最終的な手残り額』、つまり『自分がいくら手元に残したいか、いくらあれば何ができるか』という未来のワクワクするイメージをしてみることですよ。
-   周りの人から『あのエリアだからこのくらいでしか売れないよ』とか『坪単価が低すぎるんじゃない？』なんて言われることもあるかもしれませんが、それは参考程度で大丈夫。誰のためでもない、あなた自身の『こうしたい』という考えを一番大切にしてくださいね！」
-
-4. 【★重要：個別確定診断の禁止とサポート企業への橋渡し】
-   上記のアドバイスで共感した後に、自然な流れで信頼できるプロへバトンを繋ぎます。
-   「これはあくまで一般的な税率を当てはめた概算ですので、控除の特例を使ってさらに税金を減らすための細かい作戦や具体的なシミュレーションについては、カナサが太鼓判を押す地元の信頼できるサポート企業の先生たちと、細かい部分までとことん話し合ってみてくださいね。カナサがこれまでの相談内容をしっかり引き継いで、あなたとサポート企業との架け橋（バトンタッチ）をお手伝いしますよ」と優しく促してください。
-
-【沖縄不動産・独自知識データベース】
-■ 軍用地について
-・売買の基準は「倍率」（年間借地料の何倍で取引されるか）。施設ごとに相場や将来の返還リスクが異なるため、知ったかぶりをせず地元の専門業者（サポート企業）への確認を促すこと。
-■ 沖縄の相続と人間関係（門中・親族・トートーメー）について
-・土地の名義人が戦前のままで、法定相続人が数十人に膨れ上がっているケースが非常に多い。
-・AIは「沖縄の親族間の調整は、本当にエネルギーがいりますよね。まずは親族の中で一番話が通じるキーマンを特定し、登記や親族間調整のプロである地元の司法書士（サポート企業）に間に入幕らうのが、実は一番揉めずに早く進む近道ですよ」と、沖縄の文化に寄り添ったアドバイスをすること。
-"""
-
-# 🏢 3. 業者（サポート企業）データの登録
-VENDORS = [
-    {"name": "那覇カチコミ司法書士事務所", "area": "那覇市", "type": "相続", "email": "test-legal@example.com", "pr": "戦前名義の複雑な相続登記、親族間の調整が得意です！"},
-    {"name": "中部うちなー不動産", "area": "沖縄市", "type": "売買", "email": "test-estate@example.com", "pr": "軍用地（嘉手納・普天間）の売却・運用実績多数！高価買取します。"},
-    {"name": "シーサー解体工業", "area": "宜野湾市", "type": "解体", "email": "test-demolition@example.com", "pr": "実家の中古住宅の解体、更地化を近隣対策バッチリで行います！"},
-    {"name": "島んちゅ賃貸管理", "area": "浦添市", "type": "賃貸", "email": "test-rent@example.com", "pr": "移住者向けの物件紹介から、空き家の管理・賃貸運用までサポート！"}
-]
-
+VENDORS = load_vendors()
 TAKESHI_ADMIN_EMAIL = "takeshi-platform-admin@example.com"
 
-# 🎨 4. デザインの設定（★スマホ・PC完全適正化版）
+# 🎨 2. デザインの設定（スマホ・PC完全適正化版）
 st.set_page_config(page_title="沖縄不動産無料相談窓口 カナサ", page_icon="🌴", layout="wide")
 
 st.markdown("""
     <style>
-    /* 画面全体の無駄な余白を削り、スマホで横幅いっぱいに広げる */
-    .block-container {
-        padding-top: 5px !important;
-        padding-bottom: 5px !important;
-        padding-left: 10px !important;
-        padding-right: 10px !important;
-    }
-    
-    /* 背景と文字色を完全固定 */
+    .block-container { padding-top: 5px !important; padding-bottom: 5px !important; padding-left: 10px !important; padding-right: 10px !important; }
     .stApp { background-color: #FFFFFF; }
-    
-    /* チャットバルーンの文字サイズをスマホ用に適正化 */
-    [data-testid="stChatMessage"] {
-        background-color: #F8FAFC !important;
-        border: 1px solid #E2E8F0 !important;
-        border-radius: 12px !important;
-        padding: 10px !important;
-        margin-bottom: 8px !important;
-    }
-    [data-testid="stChatMessage"] p, [data-testid="stChatMessage"] span {
-        color: #000000 !important;
-        font-size: 14px !important; /* スマホで一番読みやすいサイズ */
-        line-height: 1.5 !important;
-    }
-    
-    /* 入力欄（フッター）の黒背景化を阻止 */
+    [data-testid="stChatMessage"] { background-color: #F8FAFC !important; border: 1px solid #E2E8F0 !important; border-radius: 12px !important; padding: 10px !important; margin-bottom: 8px !important; }
+    [data-testid="stChatMessage"] p, [data-testid="stChatMessage"] span { color: #000000 !important; font-size: 14px !important; line-height: 1.5 !important; }
     .stChatInputContainer { border-radius: 20px; background-color: #FFFFFF !important; }
     .stChatInputContainer input { color: #000000 !important; font-size: 14px !important; }
-    
-    /* 質問例ボタンをスマホの横幅にフィットさせる */
-    .stButton button {
-        background-color: #FFFFFF !important;
-        color: #005A9C !important;
-        border: 1px solid #005A9C !important;
-        border-radius: 8px !important;
-        font-size: 12px !important; /* ボタンの文字を少しコンパクトに */
-        width: 100% !important;
-        min-height: 40px !important;
-        padding: 4px 8px !important;
-        margin-bottom: 4px !important;
-    }
-    .stButton button:hover {
-        background-color: #005A9C !important;
-        color: #FFFFFF !important;
-    }
+    .stButton button { background-color: #FFFFFF !important; color: #005A9C !important; border: 1px solid #005A9C !important; border-radius: 8px !important; font-size: 12px !important; width: 100% !important; min-height: 40px !important; padding: 4px 8px !important; margin-bottom: 4px !important; }
+    .stButton button:hover { background-color: #005A9C !important; color: #FFFFFF !important; }
     </style>
 """, unsafe_allow_html=True)
 
-# 💡 5. ヘッダー表示（WIX側でタイトルを作るため、AI側は空白だけ）
 st.markdown('<div style="margin-top: 5px;"></div>', unsafe_allow_html=True)
 
 # セッション状態の初期化
 if "messages" not in st.session_state:
-    welcome_text = """めんそーれ！不動産相談AIの「カナサ」です。🌴
-あなたの大切な不動産や相続、税金などのモヤモヤしたお悩みを、愛（かなさ）を持って優しく紐解き、地元の頼れるサポート企業への安心な橋渡し（バトンタッチ）をお手伝いする窓口ですよ。
+    welcome_text = """めんそーれ！AI相談員の「カナサ」です。🌴
+不動産や相続のモヤモヤを優しく紐解き、地元の安心なサポート企業へそっとバトンをお繋ぎします。
 
 ⚠️ **安心のためのお願い**
-あなたのプライバシーを守るため、お名前や電話番号、詳しい住所などは**ここには絶対に入力しないで**、匿名で安心して相談してくださいね。
+名前や電話番号は**ここには入力せず**、匿名で安心して相談してくださいね。
 
-何から話していいか分からないときは、すぐ下のボタンを押すだけでも相談を始められますよ！👇"""
+すぐ下のボタンを押すだけで相談を始められますよ！👇"""
     st.session_state.messages = [{"role": "assistant", "content": welcome_text}]
     st.session_state.current_stage = "initial"
 
@@ -124,12 +64,10 @@ if "chat" not in st.session_state:
     model = genai.GenerativeModel('gemini-2.5-flash', system_instruction=SYSTEM_INSTRUCTION)
     st.session_state.chat = model.start_chat(history=[])
 
-# 過去の会話履歴を画面に表示
 for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.markdown(message["content"])
 
-# 💡 6. 進捗に応じた「連動型」質問例ボタン
 st.write("▼ 当てはまるボタンを押すか、下の入力欄からメッセージを送ってね")
 col1, col2, col3 = st.columns(3)
 click_input = None
@@ -178,13 +116,12 @@ elif st.session_state.current_stage == "kaitai":
             click_input = "沖縄で木造やRC（鉄筋コンクリート）の実家を解体する場合、大まかな坪単価の目安ってどのくらい？"
     with col2:
         if st.button("🤝 売るか貸すか"):
-            click_input = "古い家を解体して更地にした後、売却するのと賃貸で運用するの、どっちが手残り多くなるかな？"
+            click_input = "古い家を解体して更地にした後、売却するのと賃賃で運用するの、どっちが手残り多くなるかな？"
     with col3:
         if st.button("↩️ 戻る"):
             st.session_state.current_stage = "initial"
             st.rerun()
 
-# ユーザーからの入力処理
 user_input = st.chat_input("お気軽にカナサにご相談ください...")
 final_input = user_input if user_input else click_input
 
@@ -199,7 +136,7 @@ if final_input:
     st.session_state.messages.append({"role": "assistant", "content": response.text})
     st.rerun()
 
-# ---- 💡 自動業者仕分け ＆ メールテンプレート連携システム ----
+# 💡 自動業者仕分け ＆ メールテンプレート連携システム
 st.sidebar.markdown("### 🤝 カナサ厳選のサポート企業")
 st.sidebar.write("これまでの相談内容を引き継いで、地元の信頼できるプロの先生方に安全に直接問い合わせができます。")
 
@@ -208,7 +145,7 @@ for m in st.session_state.messages[1:]:
     role_name = "相談者" if m["role"] == "user" else "AIカナサ"
     conversation_summary += f"{role_name}: {m['content']}\n"
 
-if conversation_summary:
+if conversation_summary and VENDORS:
     judge_model = genai.GenerativeModel('gemini-2.5-flash')
     judge_prompt = f"以下の相談内容を読み、この相談者が最も求めている専門家のカテゴリを【相続、売買、解体、賃貸】の中から漢字またはカタカナで1つだけ答えてください。\n\n相談内容：\n{conversation_summary}"
     
@@ -253,6 +190,7 @@ if conversation_summary:
                 st.sidebar.page_link(mailto_url, label=f"📩 {vendor['name']}へバトンを繋ぐ", icon="✉️")
         else:
             st.sidebar.write("会話を進めると、あなたに最適なサポート企業がここに自動で表示されます。")
-            
     except Exception as e:
         st.sidebar.write("カナサがニーズを分析中...")
+elif not VENDORS:
+    st.sidebar.write("現在、サポート企業リストを読み込み中です。")
