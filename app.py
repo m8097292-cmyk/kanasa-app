@@ -213,7 +213,7 @@ if final_input:
 # --------------------------------------------------
 # ⭕ 修正後（黒色に強制指定するコード）
 st.write("---")
-st.markdown('<h3 style="color: #000000; margin-bottom: 10px;">🤝 相続がひと段落したら</h3>', unsafe_allow_html=True)
+st.markdown('<h3 style="color: #000000; margin-bottom: 10px;">🤝 相談がひと段落したら</h3>', unsafe_allow_html=True)
 
 # 会話履歴の集計（最初のウェルカムメッセージは除外）
 conversation_summary = ""
