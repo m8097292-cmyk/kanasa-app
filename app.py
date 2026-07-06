@@ -37,20 +37,45 @@ def load_vendors():
 VENDORS = load_vendors()
 TAKESHI_ADMIN_EMAIL = "takeshi-platform-admin@example.com"
 
-# 🎨 2. デザインの設定（見切れ対策版・メイン画面集中型）
+# 🎨 2. デザインの設定（WIX風グラデーション背景 ＆ 上部見切れ対策版）
 st.set_page_config(page_title="沖縄不動産無料相談窓口 カナサ", page_icon="🌴", layout="wide")
 
-# 🎨 デザインCSSの st.markdown 内に以下を追加（文字を中央揃えにしたり、WIXの雰囲気を再現）
 st.markdown("""
     <style>
-    /* （既存のCSSコードはそのまま残し、以下を追記してください） */
+    /* 🌊 画面全体にWIX風の明るいグラデーションを敷きます */
+    .stApp { 
+        background: linear-gradient(135deg, #FFFBEC 0%, #FFEFF2 50%, #FFFFFF 100%) !important;
+        background-attachment: fixed;
+    }
+    
+    /* 💡 チャットの背景を少し透ける白にして、高級感と読みやすさを両立 */
+    [data-testid="stChatMessage"] { 
+        background-color: rgba(255, 255, 255, 0.85) !important; 
+        border: 1px solid rgba(226, 232, 240, 0.5) !important; 
+        border-radius: 12px !important; 
+        padding: 10px !important; 
+        margin-bottom: 8px !important; 
+        backdrop-filter: blur(8px); /* すりガラス効果 */
+        box-shadow: 0 4px 12px rgba(0,0,0,0.03); /* ほんのり優しい影 */
+    }
+
+    /* 上の余白を35pxにして見切れを完全に防止 */
+    .block-container { 
+        padding-top: 35px !important; 
+        padding-bottom: 5px !important; 
+        padding-left: 10px !important; 
+        padding-right: 10px !important; 
+    }
+
+    /* WIXの雰囲気を再現するヘッダーコンテナ */
     .main-title-container {
         text-align: center;
         padding: 20px 10px;
-        background: linear-gradient(135px, #FFF5F5 0%, #FF5A76 100%);
+        background: linear-gradient(135deg, rgba(255, 245, 245, 0.9) 0%, rgba(255, 234, 238, 0.9) 100%);
         border-radius: 16px;
         margin-bottom: 25px;
         border: 1px solid #FFE0E6;
+        backdrop-filter: blur(4px);
     }
     .main-logo {
         font-size: 54px !important;
@@ -61,11 +86,20 @@ st.markdown("""
         margin: 10px 0;
     }
     .sub-text {
-        color: #FFD700 !important;
+        color: #555555 !important;
         font-size: 15px !important;
         line-height: 1.6 !important;
         margin-bottom: 8px !important;
     }
+    
+    /* 入力欄やボタンの設定 */
+    [data-testid="stChatMessage"] p, [data-testid="stChatMessage"] span { color: #000000 !important; font-size: 14px !important; line-height: 1.5 !important; }
+    .stChatInputContainer { border-radius: 20px; background-color: #FFFFFF !important; }
+    .stChatInputContainer input { color: #000000 !important; font-size: 14px !important; }
+    .diagnose-btn button { background-color: #FF8C00 !important; color: #FFFFFF !important; border: none !important; font-weight: bold !important; font-size: 16px !important; height: 50px !important; border-radius: 25px !important; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+    .stButton button { background-color: #FFFFFF !important; color: #005A9C !important; border: 1px solid #005A9C !important; border-radius: 8px !important; font-size: 12px !important; width: 100% !important; min-height: 40px !important; padding: 4px 8px !important; margin-bottom: 4px !important; }
+    .stButton button:hover { background-color: #005A9C !important; color: #FFFFFF !important; }
+    .vendor-card { background-color: rgba(255, 248, 238, 0.95) !important; border: 2px solid #F28C28; border-radius: 12px; padding: 15px; margin-top: 10px; margin-bottom: 15px; }
     </style>
 """, unsafe_allow_html=True)
 
