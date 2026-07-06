@@ -134,7 +134,6 @@ if final_input:
         response = st.session_state.chat.send_message(final_input)
         st.markdown(response.text)
     st.session_state.messages.append({"role": "assistant", "content": response.text})
-    st.rerun()
 
 # 💡 自動業者仕分け ＆ メールテンプレート連携システム
 st.sidebar.markdown("### 🤝 おススメのサポート企業")
