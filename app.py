@@ -114,7 +114,7 @@ st.markdown("""
         <p style="color: #FF5A76; font-size: 15px; font-weight: bold; margin: 5px 0 15px 0;">〜 沖縄AI（カナサ）が、あなたの悩みに寄り添いサポートします 〜</p>
         <p class="sub-text">名前や住所の入力不要</p>
         <p class="sub-text">営業電話は一切なし</p>
-        <p class="sub-text"><b>愛（かなさ）</b>を込めて、あなたと地元の優良サポート企業を繋ぐパートナー</p>
+        <p class="sub-text">あなたと地元の優良サポート企業を繋ぐパートナー</p>
         <p class="sub-text">お悩みはAIカナサに気軽に相談</p>
         <p class="sub-text">あなたの想いに寄り添いながら、次のステップへと優しくバトンタッチいたします。</p>
     </div>
