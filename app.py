@@ -61,7 +61,7 @@ st.markdown("""
         margin: 10px 0;
     }
     .sub-text {
-        color: #555555 !important;
+        color: #FFD700 !important;
         font-size: 15px !important;
         line-height: 1.6 !important;
         margin-bottom: 8px !important;
