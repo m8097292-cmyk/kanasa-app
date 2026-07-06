@@ -107,14 +107,16 @@ st.markdown("""
 # 🛠️ 以前の st.title や st.subheader があった部分を、以下に丸ごと差し替え
 st.markdown("""
     <div class="main-title-container">
-        <p style="color: #666; font-size: 14px; font-weight: bold; margin: 0;">沖縄の匿名で安心 🌴 不動産・相続相談窓口</p>
+        <p style="color: #666; font-size: 14px; font-weight: bold; margin: 0;">沖縄の匿名で安心 🌴 不動産相談窓口</p>
+        <p style="color: #666; font-size: 14px; font-weight: bold; margin: 0;">売買・相続・解体など不動産全般</p>
+        <p style="color: #666; font-size: 14px; font-weight: bold; margin: 0;">信頼できるサポート企業探しに活用下さい</p>
         <div class="main-logo">KANASA</div>
         <p style="color: #FF5A76; font-size: 15px; font-weight: bold; margin: 5px 0 15px 0;">〜 沖縄AI（カナサ）が、あなたの悩みに寄り添いサポートします 〜</p>
-        <p class="sub-text">名前や住所の入力は不要</p>
-        <p class="sub-text">後からしつこい営業電話が鳴り響く心配は一切ありません</p>
+        <p class="sub-text">名前や住所の入力不要</p>
+        <p class="sub-text">営業電話は一切なし</p>
         <p class="sub-text"><b>愛（かなさ）</b>を込めて、あなたと地元の優良サポート企業を繋ぐパートナー</p>
-        <p class="sub-text">複雑なお悩みはAIカナサにすべてお任せください</p>
-        <p class="sub-text">あなたの想いに寄り添いながら、次の確かなステップへと優しくバトンタッチいたします。</p>
+        <p class="sub-text">お悩みはAIカナサに気軽に相談</p>
+        <p class="sub-text">あなたの想いに寄り添いながら、次のステップへと優しくバトンタッチいたします。</p>
     </div>
 """, unsafe_allow_html=True)
 
