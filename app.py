@@ -40,25 +40,17 @@ TAKESHI_ADMIN_EMAIL = "takeshi-platform-admin@example.com"
 # 🎨 2. デザインの設定（見切れ対策版・メイン画面集中型）
 st.set_page_config(page_title="沖縄不動産無料相談窓口 カナサ", page_icon="🌴", layout="wide")
 
-st.markdown("""
-    <style>
-    /* 上の余白を50pxにして見切れを完全に防止 */
-    .block-container { padding-top: 45px !important; padding-bottom: 5px !important; padding-left: 10px !important; padding-right: 10px !important; }
-    .stApp { background-color: #FFFFFF; }
-    [data-testid="stChatMessage"] { background-color: #F8FAFC !important; border: 1px solid #E2E8F0 !important; border-radius: 12px !important; padding: 10px !important; margin-bottom: 8px !important; }
-    [data-testid="stChatMessage"] p, [data-testid="stChatMessage"] span { color: #000000 !important; font-size: 14px !important; line-height: 1.5 !important; }
-    .stChatInputContainer { border-radius: 20px; background-color: #FFFFFF !important; }
-    .stChatInputContainer input { color: #000000 !important; font-size: 14px !important; }
-    /* 診断ボタンを目立たせるオレンジのデザイン */
-    .diagnose-btn button { background-color: #FF8C00 !important; color: #FFFFFF !important; border: none !important; font-weight: bold !important; font-size: 16px !important; height: 50px !important; border-radius: 25px !important; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-    /* 通常の選択ボタン */
-    .stButton button { background-color: #FFFFFF !important; color: #005A9C !important; border: 1px solid #005A9C !important; border-radius: 8px !important; font-size: 12px !important; width: 100% !important; min-height: 40px !important; padding: 4px 8px !important; margin-bottom: 4px !important; }
-    .stButton button:hover { background-color: #005A9C !important; color: #FFFFFF !important; }
-    /* 業者カードの装飾 */
-    .vendor-card { background-color: #FFF8EE; border: 2px solid #F28C28; border-radius: 12px; padding: 15px; margin-top: 10px; margin-bottom: 15px; }
-    </style>
-""", unsafe_allow_html=True)
-
+# 今のコードの st.set_page_config の部分をこのように強化します
+st.set_page_config(
+    page_title="沖縄不動産無料相談窓口 カナサ | 匿名・無料の相続・軍用地相談",
+    page_icon="🌴",
+    layout="wide",
+    menu_items={
+        'Get help': None,
+        'Report a bug': None,
+        'About': "沖縄特有の不動産・軍用地・相続の悩みを匿名で解決するAI相談窓口「カナサ」です。"
+    }
+)
 # セッション状態の初期化
 if "messages" not in st.session_state:
     welcome_text = """    めんそーれ！AI相談員の「カナサ」です。🌴
