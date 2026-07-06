@@ -6,7 +6,7 @@ import csv
 import os
 
 # 1. Geminiの初期設定（ご自身のAPIキーに書き換えてください）
-GOOGLE_API_KEY = "YOUR_GEMINI_API_KEY_HERE"
+GOOGLE_API_KEY = "AQ.Ab8RN6LbTNW5CFttCGZtEgJ7RN7X4bGvg3nXLzO_IorhU6DNPg"
 genai.configure(api_key=GOOGLE_API_KEY)
 
 # 📂 外部ファイルからプロンプトを読み込む
