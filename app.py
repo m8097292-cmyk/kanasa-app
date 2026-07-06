@@ -5,7 +5,7 @@ import csv
 import os
 
 # 1. Geminiの初期設定（ご自身のAPIキーに書き換えてください）
-GOOGLE_API_KEY = "YOUR_GEMINI_API_KEY_HERE"
+GOOGLE_API_KEY = "AQ.Ab8RN6LbTNW5CFttCGZtEgJ7RN7X4bGvg3nXLzO_IorhU6DNPg"
 genai.configure(api_key=GOOGLE_API_KEY)
 
 # 📂 外部ファイルからプロンプトを読み込む
@@ -47,7 +47,7 @@ st.markdown("""
     .main-title-container {
         text-align: center;
         padding: 20px 10px;
-        background: linear-gradient(135px, #FFF5F5 0%, #FFEAEE 100%);
+        background: linear-gradient(135px, #FFF5F5 0%, #FF5A76 100%);
         border-radius: 16px;
         margin-bottom: 25px;
         border: 1px solid #FFE0E6;
