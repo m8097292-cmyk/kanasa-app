@@ -5,7 +5,7 @@ import csv
 import os
 
 # 1. Geminiの初期設定（ご自身のAPIキーに書き換えてください）
-GOOGLE_API_KEY = "AQ.Ab8RN6LbTNW5CFttCGZtEgJ7RN7X4bGvg3nXLzO_IorhU6DNPg"
+GOOGLE_API_KEY = "YOUR_GEMINI_API_KEY_HERE"
 genai.configure(api_key=GOOGLE_API_KEY)
 
 # 📂 外部ファイルからプロンプトを読み込む
@@ -40,17 +40,50 @@ TAKESHI_ADMIN_EMAIL = "takeshi-platform-admin@example.com"
 # 🎨 2. デザインの設定（見切れ対策版・メイン画面集中型）
 st.set_page_config(page_title="沖縄不動産無料相談窓口 カナサ", page_icon="🌴", layout="wide")
 
-# 今のコードの st.set_page_config の部分をこのように強化します
-st.set_page_config(
-    page_title="沖縄不動産無料相談窓口 カナサ | 匿名・無料の相続・軍用地相談",
-    page_icon="🌴",
-    layout="wide",
-    menu_items={
-        'Get help': None,
-        'Report a bug': None,
-        'About': "沖縄特有の不動産・軍用地・相続の悩みを匿名で解決するAI相談窓口「カナサ」です。"
+# 🎨 デザインCSSの st.markdown 内に以下を追加（文字を中央揃えにしたり、WIXの雰囲気を再現）
+st.markdown("""
+    <style>
+    /* （既存のCSSコードはそのまま残し、以下を追記してください） */
+    .main-title-container {
+        text-align: center;
+        padding: 20px 10px;
+        background: linear-gradient(135px, #FFF5F5 0%, #FFEAEE 100%);
+        border-radius: 16px;
+        margin-bottom: 25px;
+        border: 1px solid #FFE0E6;
     }
-)
+    .main-logo {
+        font-size: 54px !important;
+        font-weight: bold;
+        color: #333333;
+        font-family: 'Helvetica Neue', Arial, sans-serif;
+        letter-spacing: 2px;
+        margin: 10px 0;
+    }
+    .sub-text {
+        color: #555555 !important;
+        font-size: 15px !important;
+        line-height: 1.6 !important;
+        margin-bottom: 8px !important;
+    }
+    </style>
+""", unsafe_allow_html=True)
+
+
+# 🛠️ 以前の st.title や st.subheader があった部分を、以下に丸ごと差し替え
+st.markdown("""
+    <div class="main-title-container">
+        <p style="color: #666; font-size: 14px; font-weight: bold; margin: 0;">沖縄の匿名で安心 🌴 不動産・相続相談窓口</p>
+        <div class="main-logo">KANASA</div>
+        <p style="color: #FF5A76; font-size: 15px; font-weight: bold; margin: 5px 0 15px 0;">〜 沖縄AI（カナサ）が、あなたの悩みに寄り添いサポートします 〜</p>
+        <p class="sub-text">名前や住所の入力は不要</p>
+        <p class="sub-text">後からしつこい営業電話が鳴り響く心配は一切ありません</p>
+        <p class="sub-text"><b>愛（かなさ）</b>を込めて、あなたと地元の優良サポート企業を繋ぐパートナー</p>
+        <p class="sub-text">複雑なお悩みはAIカナサにすべてお任せください</p>
+        <p class="sub-text">あなたの想いに寄り添いながら、次の確かなステップへと優しくバトンタッチいたします。</p>
+    </div>
+""", unsafe_allow_html=True)
+
 # セッション状態の初期化
 if "messages" not in st.session_state:
     welcome_text = """    めんそーれ！AI相談員の「カナサ」です。🌴
