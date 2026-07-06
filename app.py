@@ -42,7 +42,7 @@ st.set_page_config(page_title="沖縄不動産無料相談窓口 カナサ", pag
 
 st.markdown("""
     <style>
-    /* 上の余白を35pxにして見切れを完全に防止 */
+    /* 上の余白を50pxにして見切れを完全に防止 */
     .block-container { padding-top: 45px !important; padding-bottom: 5px !important; padding-left: 10px !important; padding-right: 10px !important; }
     .stApp { background-color: #FFFFFF; }
     [data-testid="stChatMessage"] { background-color: #F8FAFC !important; border: 1px solid #E2E8F0 !important; border-radius: 12px !important; padding: 10px !important; margin-bottom: 8px !important; }
