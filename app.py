@@ -137,7 +137,7 @@ if final_input:
     st.rerun()
 
 # 💡 自動業者仕分け ＆ メールテンプレート連携システム
-st.sidebar.markdown("### 🤝 カナサ厳選のサポート企業")
+st.sidebar.markdown("### 🤝 おススメのサポート企業")
 st.sidebar.write("これまでの相談内容を引き継いで、地元の信頼できるプロの先生方に安全に直接問い合わせができます。")
 
 conversation_summary = ""
