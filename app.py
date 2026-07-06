@@ -111,7 +111,7 @@ st.markdown("""
         <p style="color: #666; font-size: 14px; font-weight: bold; margin: 0;">売買・相続・解体など不動産全般</p>
         <p style="color: #666; font-size: 14px; font-weight: bold; margin: 0;">信頼できるサポート企業探しに活用下さい</p>
         <div class="main-logo">KANASA</div>
-        <p style="color: #FF5A76; font-size: 15px; font-weight: bold; margin: 5px 0 15px 0;">〜 沖縄AI（カナサ）が、あなたの悩みに寄り添いサポートします 〜</p>
+        <p style="color: #FF5A76; font-size: 15px; font-weight: bold; margin: 5px 0 15px 0;">〜 沖縄AI（カナサ）が悩みに寄り添いサポート 〜</p>
         <p class="sub-text">名前や住所の入力不要</p>
         <p class="sub-text">営業電話は一切なし</p>
         <p class="sub-text">あなたと地元の優良サポート企業を繋ぐパートナー</p>
