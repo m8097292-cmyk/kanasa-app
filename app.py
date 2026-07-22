@@ -196,7 +196,19 @@ for message in st.session_state.messages:
         st.markdown(message["content"])
 
 # 選択肢ボタンの表示
-st.markdown('<p style="color: #000000; font-weight: bold; font-size: 14px; margin-bottom: 8px;">▼ 当てはまるボタンを押すか、下の入力欄からメッセージを入力</p>', unsafe_allow_html=True)
+st.markdown("""
+    <p style="
+        color: #000000; 
+        font-weight: bold; 
+        font-size: clamp(11px, 3.2vw, 14px); 
+        margin-bottom: 8px; 
+        white-space: nowrap; 
+        overflow: hidden; 
+        text-overflow: ellipsis;
+    ">
+        ▼ 当てはまるボタンを押すか、下の入力欄からメッセージを入力
+    </p>
+""", unsafe_allow_html=True)
 col1, col2, col3 = st.columns(3)
 click_input = None
 
@@ -268,4 +280,16 @@ if final_input:
 # 💡【大進化】チャットルーム内・ボタン起動型マッチング
 # --------------------------------------------------
 st.write("---")
-st.markdown('<h3 style="color: #000000; margin-bottom: 10px;">🤝 相談者へおススメのサポート企業</h3>', unsafe_allow
+st.markdown("""
+    <p style="
+        color: #000000; 
+        font-weight: bold; 
+        font-size: clamp(11px, 3.2vw, 14px); 
+        margin-bottom: 8px; 
+        white-space: nowrap; 
+        overflow: hidden; 
+        text-overflow: ellipsis;
+    ">
+        🤝相談者にマッチするサポート企業
+    </p>
+""", unsafe_allow_html=True)
