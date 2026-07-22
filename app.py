@@ -139,7 +139,7 @@ for message in st.session_state.messages:
         st.markdown(message["content"])
 
 # 選択肢ボタンの表示
-st.write("▼ 当てはまるボタンを押すか、下の入力欄からメッセージを入力")
+st.write("### :black[▼ 当てはまるボタンを押すか、下の入力欄からメッセージを入力]")
 col1, col2, col3 = st.columns(3)
 click_input = None
 
