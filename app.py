@@ -13,7 +13,7 @@ def load_prompt():
     if os.path.exists("prompt.txt"):
         with open("prompt.txt", "r", encoding="utf-8") as f:
             return f.read()
-    return "あなたは優秀なAIアシスタントです。"
+    return "あなたは沖縄の不動産・相続・税金・土地活用・風習に特化した優秀なAIアシスタントです。"
 
 SYSTEM_INSTRUCTION = load_prompt()
 
@@ -123,10 +123,10 @@ st.markdown("""
 # セッション状態の初期化
 if "messages" not in st.session_state:
     welcome_text = """    めんそーれ！AI相談員の「カナサ」です。🌴
-    不動産や相続のモヤモヤを優しく紐解き、地元の安心なサポート企業へそっとバトンをお繋ぎします。
+    不動産や相続でお悩みのウチなんちゅを無料サポート！
 
     ⚠️ **安心のためのお願い**
-    名前や電話番号は**ここには入力せず**、匿名で安心して相談してくださいね。
+    名前や電話番号は**ここには入力せず**、匿名で安心して相談してください
     すぐ下のボタンを押すだけで相談を始められますよ！👇"""
     st.session_state.messages = [{"role": "assistant", "content": welcome_text}]
     st.session_state.current_stage = "initial"
