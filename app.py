@@ -4,7 +4,7 @@ import urllib.parse
 import csv
 import os
 
-# 1. Geminiの初期設定（ご自身のAPIキーに書き換えてください）
+# 1. Geminiの初期設定
 GOOGLE_API_KEY = "AQ.Ab8RN6LbTNW5CFttCGZtEgJ7RN7X4bGvg3nXLzO_IorhU6DNPg"
 genai.configure(api_key=GOOGLE_API_KEY)
 
@@ -26,7 +26,6 @@ def load_vendors():
             for row in reader:
                 vendors.append(row)
     else:
-        # 💡 テスト用（csvがない場合の保険。image_url列を追加しています）
         vendors = [
             {"name": "那覇カチコミ司法書士事務所", "area": "那覇市", "type": "相続", "email": "test-legal@example.com", "pr": "戦前名義の複雑な相続登記、親族間の調整が得意です！", "image_url": "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=150"},
             {"name": "中部うちなー不動産", "area": "沖縄市", "type": "売買", "email": "test-estate@example.com", "pr": "軍用地の売却・運用実績多数！高価買取します。", "image_url": "https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=150"},
@@ -37,7 +36,7 @@ def load_vendors():
 VENDORS = load_vendors()
 TAKESHI_ADMIN_EMAIL = "takeshi-platform-admin@example.com"
 
-# 🎨 2. デザインの設定（WIX風グラデーション背景 ＆ 上部見切れ対策版）
+# 🎨 2. デザインの設定（PC＆スマホ・レスポンシブ完全最適化版）
 st.set_page_config(page_title="沖縄不動産無料相談窓口 カナサ", page_icon="🌴", layout="wide")
 
 st.markdown("""
@@ -48,18 +47,18 @@ st.markdown("""
         background-attachment: fixed;
     }
     
-    /* 💡 チャットの背景を少し透ける白にして、高級感と読みやすさを両立 */
+    /* 💡 チャットの背景設定 */
     [data-testid="stChatMessage"] { 
         background-color: rgba(255, 255, 255, 0.85) !important; 
         border: 1px solid rgba(226, 232, 240, 0.5) !important; 
         border-radius: 12px !important; 
         padding: 10px !important; 
         margin-bottom: 8px !important; 
-        backdrop-filter: blur(8px); /* すりガラス効果 */
-        box-shadow: 0 4px 12px rgba(0,0,0,0.03); /* ほんのり優しい影 */
+        backdrop-filter: blur(8px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.03);
     }
 
-    /* 上の余白を35pxにして見切れを完全に防止 */
+    /* 余白の見切れ防止 */
     .block-container { 
         padding-top: 35px !important; 
         padding-bottom: 5px !important; 
@@ -67,50 +66,108 @@ st.markdown("""
         padding-right: 10px !important; 
     }
 
-    /* WIXの雰囲気を再現するヘッダーコンテナ */
+    /* 📱 WIX風ヘッダーコンテナ（レスポンシブ対応） */
     .main-title-container {
         text-align: center;
-        padding: 20px 10px;
+        padding: 20px 12px;
         background: linear-gradient(135deg, rgba(255, 245, 245, 0.9) 0%, rgba(255, 234, 238, 0.9) 100%);
         border-radius: 16px;
-        margin-bottom: 25px;
+        margin-bottom: 20px;
         border: 1px solid #FFE0E6;
         backdrop-filter: blur(4px);
     }
+    
+    /* ロゴ（可変サイズ：36px〜54px） */
     .main-logo {
-        font-size: 54px !important;
+        font-size: clamp(36px, 8vw, 54px) !important;
         font-weight: bold;
         color: #333333;
         font-family: 'Helvetica Neue', Arial, sans-serif;
         letter-spacing: 2px;
-        margin: 10px 0;
-    }
-    .sub-text {
-        color: #555555 !important;
-        font-size: 15px !important;
-        line-height: 1.6 !important;
-        margin-bottom: 8px !important;
+        margin: 8px 0;
     }
     
-    /* 入力欄やボタンの設定 */
+    /* 説明テキスト（可変サイズ・文字折り返し最適化） */
+    .sub-text {
+        color: #555555 !important;
+        font-size: clamp(12px, 3.2vw, 15px) !important;
+        line-height: 1.6 !important;
+        margin-bottom: 6px !important;
+        word-break: normal;
+        overflow-wrap: break-word;
+    }
+
+    .top-sub-title {
+        color: #666666;
+        font-size: clamp(12px, 3vw, 14px);
+        font-weight: bold;
+        margin: 0;
+    }
+
+    .catch-phrase {
+        color: #FF5A76;
+        font-size: clamp(13px, 3.5vw, 16px);
+        font-weight: bold;
+        margin: 5px 0 12px 0;
+    }
+    
+    /* 入力欄やボタンの設定（スマホで潰れないように調整） */
     [data-testid="stChatMessage"] p, [data-testid="stChatMessage"] span { color: #000000 !important; font-size: 14px !important; line-height: 1.5 !important; }
     .stChatInputContainer { border-radius: 20px; background-color: #FFFFFF !important; }
     .stChatInputContainer input { color: #000000 !important; font-size: 14px !important; }
+    
     .diagnose-btn button { background-color: #FF8C00 !important; color: #FFFFFF !important; border: none !important; font-weight: bold !important; font-size: 16px !important; height: 50px !important; border-radius: 25px !important; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-    .stButton button { background-color: #FFFFFF !important; color: #005A9C !important; border: 1px solid #005A9C !important; border-radius: 8px !important; font-size: 12px !important; width: 100% !important; min-height: 40px !important; padding: 4px 8px !important; margin-bottom: 4px !important; }
+    
+    /* 選択肢ボタン（文字がはみ出さないサイズ感に調整） */
+    .stButton button { 
+        background-color: #FFFFFF !important; 
+        color: #005A9C !important; 
+        border: 1px solid #005A9C !important; 
+        border-radius: 8px !important; 
+        font-size: clamp(11px, 2.8vw, 13px) !important; 
+        width: 100% !important; 
+        min-height: 44px !important; 
+        padding: 4px 6px !important; 
+        margin-bottom: 4px !important; 
+        line-height: 1.3 !important;
+    }
     .stButton button:hover { background-color: #005A9C !important; color: #FFFFFF !important; }
-    .vendor-card { background-color: rgba(255, 248, 238, 0.95) !important; border: 2px solid #F28C28; border-radius: 12px; padding: 15px; margin-top: 10px; margin-bottom: 15px; }
+    
+    /* 📦 業者カード（スマホで縦並びに崩れないレスポンシブカード） */
+    .vendor-card { 
+        background-color: rgba(255, 248, 238, 0.95) !important; 
+        border: 2px solid #F28C28; 
+        border-radius: 12px; 
+        padding: 15px; 
+        margin-top: 10px; 
+        margin-bottom: 15px; 
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+        align-items: flex-start;
+    }
+    .vendor-img {
+        width: 140px;
+        max-width: 100%;
+        height: auto;
+        border-radius: 8px;
+        object-fit: cover;
+    }
+    .vendor-info {
+        flex: 1;
+        min-width: 200px;
+    }
     </style>
 """, unsafe_allow_html=True)
 
 
-# 🛠️ 以前の st.title や st.subheader があった部分を、以下に丸ごと差し替え
+# 🌴 ヘッダー部分（自動折り返し＆文字サイズレスポンシブ対応）
 st.markdown("""
     <div class="main-title-container">
-        <p style="color: #666; font-size: 14px; font-weight: bold; margin: 0;">匿名で安心 🌴 不動産相談窓口</p>
-        <p style="color: #666; font-size: 14px; font-weight: bold; margin: 0;">相続や売買・賃貸など不動産全般</p>
+        <p class="top-sub-title">匿名で安心 🌴 不動産相談窓口</p>
+        <p class="top-sub-title">相続や売買・賃貸など不動産全般</p>
         <div class="main-logo">KANASA</div>
-        <p style="color: #FF5A76; font-size: 15px; font-weight: bold; margin: 5px 0 15px 0;">〜 沖縄AI（カナサ）が悩みに寄り添いサポート 〜</p>
+        <p class="catch-phrase">〜 沖縄AI（カナサ）が悩みに寄り添いサポート 〜</p>
         <p class="sub-text">名前や住所の入力不要</p>
         <p class="sub-text">営業電話は一切なし</p>
         <p class="sub-text">あなたと地元のサポート企業を繋ぐパートナー</p>
@@ -121,11 +178,11 @@ st.markdown("""
 
 # セッション状態の初期化
 if "messages" not in st.session_state:
-    welcome_text = """    めんそーれ！AI相談員の「カナサ」です。🌴
-    不動産や相続でお悩みのウチなんちゅを無料サポート！
+    welcome_text = """めんそーれ！AI相談員の「カナサ」です。🌴
+不動産や相続でお悩みのウチなんちゅを無料サポート！
 
-    ⚠️ **安心のためのお願い**
-    名前や電話番号は**チャット内に入力せず**、匿名で安心してご相談してください！"""
+⚠️ **安心のためのお願い**
+名前や電話番号は**チャット内に入力せず**、匿名で安心してご相談してください！"""
     st.session_state.messages = [{"role": "assistant", "content": welcome_text}]
     st.session_state.current_stage = "initial"
 
@@ -145,7 +202,7 @@ click_input = None
 
 if st.session_state.current_stage == "initial":
     with col1:
-        if st.button("💡 相続が発生したけど何からすれば良い？"):
+        if st.button("💡 相続が発生したけれど何からすれば良い？"):
             click_input = "相続が発生したけれど、何からしたらいいか分からないさぁ"
             st.session_state.current_stage = "souzoku"
     with col2:
@@ -206,68 +263,9 @@ if final_input:
         response = st.session_state.chat.send_message(final_input)
         st.markdown(response.text)
     st.session_state.messages.append({"role": "assistant", "content": response.text})
-    # 💡 無限ループ防止のため st.rerun() はここから削除しました
 
 # --------------------------------------------------
 # 💡【大進化】チャットルーム内・ボタン起動型マッチング
 # --------------------------------------------------
-# ⭕ 修正後（黒色に強制指定するコード）
 st.write("---")
-st.markdown('<h3 style="color: #000000; margin-bottom: 10px;">🤝 相談者へおススメのサポート企業</h3>', unsafe_allow_html=True)
-
-# 会話履歴の集計（最初のウェルカムメッセージは除外）
-conversation_summary = ""
-for m in st.session_state.messages[1:]:
-    role_name = "相談者" if m["role"] == "user" else "AIカナサ"
-    conversation_summary += f"{role_name}: {m['content']}\n"
-
-# 会話が1往復以上あったら、メイン画面にデカデカと診断ボタンを表示
-if conversation_summary and VENDORS:
-    st.markdown('<div class="diagnose-btn">', unsafe_allow_html=True)
-    diagnose_clicked = st.button("🎁 あなたにピッタリの地元のサポート企業を診断する")
-    st.markdown('</div>', unsafe_allow_html=True)
-
-    if diagnose_clicked:
-        with st.spinner("カナサがこれまでの内容から最適なプロを厳選中..."):
-            judge_model = genai.GenerativeModel('gemini-2.5-flash')
-            judge_prompt = f"以下の相談内容を読み、この相談者が最も求めている専門家のカテゴリを【相続、売買、解体、賃貸】の中から漢字またはカタカナで1つだけ答えてください。\n\n相談内容：\n{conversation_summary}"
-            
-            try:
-                detected_type = judge_model.generate_content(judge_prompt).text.strip()
-                matched_vendors = [v for v in VENDORS if v["type"] in detected_type]
-                
-                if matched_vendors:
-                    st.success(f"🎉 あなたの相談タイプ【{detected_type}】に最適な企業が見つかりました！")
-                    
-                    for vendor in matched_vendors:
-                        # 📦 画面中央にリッチなカード形式で業者を表示（写真付き）
-                        st.markdown(f"""
-                        <div class="vendor-card">
-                            <table style="width:100%; border:none; background:none;">
-                                <tr>
-                                    <td style="width:160px; vertical-align:top; border:none;">
-                                        <img src="{vendor.get('image_url', 'https://via.placeholder.com/150')}" style="width:150px; border-radius:8px; object-fit:cover;">
-                                    </td>
-                                    <td style="vertical-align:top; border:none; padding-left:15px;">
-                                        <h4 style="color:#005A9C; margin:0 0 8px 0;">🏢 {vendor['name']}</h4>
-                                        <p style="margin:0 0 5px 0; font-size:13px; color:#555;">🎯 <b>専門分野:</b> {vendor['type']}</p>
-                                        <p style="margin:0; font-size:14px; color:#333;">📢 {vendor['pr']}</p>
-                                    </td>
-                                </tr>
-                            </table>
-                        </div>
-                        """, unsafe_allow_html=True)
-                        
-                        # メール送信リンク
-                        mail_subject = f"【AIカナサ窓口経由】新規ご相談（カテゴリ：{vendor['type']}）"
-                        mail_body = f"{vendor['name']} 御中\n\n「沖縄不動産無料相談窓口 カナサ」より引き継ぎです。\n\n【対話リポート】\n{conversation_summary}\n\n■ お名前：【 】\n■ お電話番号：【 】\n※確認用CC: {TAKESHI_ADMIN_EMAIL}"
-                        
-                        encoded_subject = urllib.parse.quote(mail_subject)
-                        encoded_body = urllib.parse.quote(mail_body)
-                        mailto_url = f"mailto:{vendor['email']}?cc={TAKESHI_ADMIN_EMAIL}&subject={encoded_subject}&body={encoded_body}"
-                        
-                        st.page_link(mailto_url, label=f"👉 {vendor['name']}にこの内容で無料相談のバトンを繋ぐ", icon="✉️")
-                else:
-                    st.warning("現在、該当するカテゴリのサポート企業が準備中です。そのままカナサにご相談を続けてください。")
-            except Exception as e:
-                st.error("診断中にエラーが発生しました。もう一度お試しください。")
+st.markdown('<h3 style="color: #000000; margin-bottom: 10px;">🤝 相談者へおススメのサポート企業</h3>', unsafe_allow
