@@ -139,7 +139,7 @@ for message in st.session_state.messages:
         st.markdown(message["content"])
 
 # 選択肢ボタンの表示
-st.write("▼ 当てはまるボタンを押すか、下の入力欄からメッセージを入力")
+st.markdown('<p style="color: #000000; font-weight: bold; font-size: 14px; margin-bottom: 8px;">▼ 当てはまるボタンを押すか、下の入力欄からメッセージを入力</p>', unsafe_allow_html=True)
 col1, col2, col3 = st.columns(3)
 click_input = None
 
