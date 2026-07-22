@@ -107,14 +107,13 @@ st.markdown("""
 # 🛠️ 以前の st.title や st.subheader があった部分を、以下に丸ごと差し替え
 st.markdown("""
     <div class="main-title-container">
-        <p style="color: #666; font-size: 14px; font-weight: bold; margin: 0;">沖縄の匿名で安心 🌴 不動産相談窓口</p>
-        <p style="color: #666; font-size: 14px; font-weight: bold; margin: 0;">売買・相続・解体など不動産全般</p>
-        <p style="color: #666; font-size: 14px; font-weight: bold; margin: 0;">信頼できるサポート企業探しに活用下さい</p>
+        <p style="color: #666; font-size: 14px; font-weight: bold; margin: 0;">匿名で安心 🌴 不動産相談窓口</p>
+        <p style="color: #666; font-size: 14px; font-weight: bold; margin: 0;">相続や売買・賃貸など不動産全般</p>
         <div class="main-logo">KANASA</div>
         <p style="color: #FF5A76; font-size: 15px; font-weight: bold; margin: 5px 0 15px 0;">〜 沖縄AI（カナサ）が悩みに寄り添いサポート 〜</p>
         <p class="sub-text">名前や住所の入力不要</p>
         <p class="sub-text">営業電話は一切なし</p>
-        <p class="sub-text">あなたと地元の優良サポート企業を繋ぐパートナー</p>
+        <p class="sub-text">あなたと地元のサポート企業を繋ぐパートナー</p>
         <p class="sub-text">お悩みはAIカナサに気軽に相談</p>
         <p class="sub-text">あなたの想いに寄り添いながら、次のステップへと優しくバトンタッチいたします。</p>
     </div>
@@ -126,7 +125,7 @@ if "messages" not in st.session_state:
     不動産や相続でお悩みのウチなんちゅを無料サポート！
 
     ⚠️ **安心のためのお願い**
-    名前や電話番号は**ここには入力せず**、匿名で安心して相談してください
+    名前や電話番号は**チャット内に入力せず**、匿名で安心してご相談してください！
     すぐ下のボタンを押すだけで相談を始められますよ！👇"""
     st.session_state.messages = [{"role": "assistant", "content": welcome_text}]
     st.session_state.current_stage = "initial"
@@ -141,21 +140,21 @@ for message in st.session_state.messages:
         st.markdown(message["content"])
 
 # 選択肢ボタンの表示
-st.write("▼ 当てはまるボタンを押すか、下の入力欄からメッセージを送ってね")
+st.write("▼ 当てはまるボタンを押すか、下の入力欄からメッセージを入力")
 col1, col2, col3 = st.columns(3)
 click_input = None
 
 if st.session_state.current_stage == "initial":
     with col1:
-        if st.button("💡 相続が不明"):
+        if st.button("💡 相続が発生したけど何からすれば良い？"):
             click_input = "相続が発生したけれど、何からしたらいいか分からないさぁ"
             st.session_state.current_stage = "souzoku"
     with col2:
-        if st.button("🔰 軍用地の仕組み"):
+        if st.button("🔰 軍用地の仕組みが良く分からない"):
             click_input = "軍用地を相続したけれど、仕組みが全然分からない"
             st.session_state.current_stage = "gunyou"
     with col3:
-        if st.button("🏚️ 実家の処分・解体"):
+        if st.button("🏚️ 古家を活用または解体したい"):
             click_input = "古い実家を処分したいけれど、解体費用ってどのくらい？"
             st.session_state.current_stage = "kaitai"
 
@@ -215,7 +214,7 @@ if final_input:
 # --------------------------------------------------
 # ⭕ 修正後（黒色に強制指定するコード）
 st.write("---")
-st.markdown('<h3 style="color: #000000; margin-bottom: 10px;">🤝 相談がひと段落したら</h3>', unsafe_allow_html=True)
+st.markdown('<h3 style="color: #000000; margin-bottom: 10px;">🤝 相談者へおススメのサポート企業</h3>', unsafe_allow_html=True)
 
 # 会話履歴の集計（最初のウェルカムメッセージは除外）
 conversation_summary = ""
