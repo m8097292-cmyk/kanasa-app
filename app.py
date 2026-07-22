@@ -110,6 +110,12 @@ st.markdown("""
         font-weight: bold;
         margin: 5px 0 12px 0;
     }
+
+    /* ⭕ 箇条書き（リスト）の文字色を強制的に黒にする設定 */
+    [data-testid="stChatMessage"] ul, 
+    [data-testid="stChatMessage"] li { 
+        color: #000000 !important; 
+    }
     
     /* 入力欄やボタンの設定（スマホで潰れないように調整） */
     [data-testid="stChatMessage"] p, [data-testid="stChatMessage"] span { color: #000000 !important; font-size: 14px !important; line-height: 1.5 !important; }
