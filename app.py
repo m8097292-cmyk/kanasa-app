@@ -279,9 +279,53 @@ if final_input:
         st.markdown(final_input)
 
     with st.chat_message("assistant"):
+        # 1. AIからの回答を取得
         response = st.session_state.chat.send_message(final_input)
-        st.markdown(response.text)
-    st.session_state.messages.append({"role": "assistant", "content": response.text})
+        ai_reply = response.text
+        
+        # 2. 相談内容に合わせてマッチする業者を自動選出する処理
+        matched_vendors_html = ""
+        for vendor in VENDORS:
+            # ユーザーの入力やAIの回答に「相続」「解体」「売買」などのキーワードが含まれているか判定
+            if (vendor["type"] in final_input) or (vendor["type"] in ai_reply) or (st.session_state.current_stage == "souzoku" and vendor["type"] == "相続") or (st.session_state.current_stage == "kaitai" and vendor["type"] == "解体") or (st.session_state.current_stage == "gunyou" and vendor["type"] == "売買"):
+                
+                # メール問い合わせ用のURLを作成
+                subject = urllib.parse.quote(f"【Okisapo+】{vendor['name']}様への相談")
+                body = urllib.parse.quote(f"相談内容：\n{final_input}\n\nご回答よろしくお願いします。")
+                mailto_link = f"mailto:{vendor['email']}?cc={TAKESHI_ADMIN_EMAIL}&subject={subject}&body={body}"
+                
+                # 業者カードのHTMLを作成
+                matched_vendors_html += f"""
+                <div class="vendor-card">
+                    <img src="{vendor['image_url']}" class="vendor-img">
+                    <div class="vendor-info">
+                        <h4 style="margin:0 0 5px 0; color:#333;">🤝 {vendor['name']}（{vendor['area']}）</h4>
+                        <p style="margin:0 0 8px 0; font-size:13px; color:#555;">{vendor['pr']}</p>
+                        <a href="{mailto_link}" target="_blank" style="
+                            display: inline-block;
+                            background-color: #FF8C00;
+                            color: white !important;
+                            padding: 8px 16px;
+                            border-radius: 20px;
+                            text-decoration: none;
+                            font-weight: bold;
+                            font-size: 13px;
+                        ">✉️ この企業に匿名相談・見積もり</a>
+                    </div>
+                </div>
+                """
+
+        # 3. AIの回答テキストを表示
+        st.markdown(ai_reply, unsafe_allow_html=True)
+        
+        # 4. マッチした業者があれば、回答の下に業者カードを表示！
+        if matched_vendors_html:
+            st.markdown("### 💡 このお悩みをサポートできる地元の専門企業")
+            st.markdown(matched_vendors_html, unsafe_allow_html=True)
+            ai_reply += "\n\n### 💡 このお悩みをサポートできる地元の専門企業\n" + matched_vendors_html
+
+    # セッション履歴に保存
+    st.session_state.messages.append({"role": "assistant", "content": ai_reply})
 
 # --------------------------------------------------
 # 💡【大進化】チャットルーム内・ボタン起動型マッチング
