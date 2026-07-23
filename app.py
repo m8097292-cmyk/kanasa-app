@@ -184,6 +184,8 @@ st.markdown("""
 # セッション状態の初期化
 if "messages" not in st.session_state:
     welcome_text = """めんそーれ！AI相談員の「カナサ」です。
+
+    
     🌴不動産や相続でお悩みのウチなんちゅを無料サポート！
 
 ⚠️<b> **安心のためのお願い**<b><br>
