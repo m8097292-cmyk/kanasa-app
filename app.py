@@ -187,7 +187,7 @@ if "messages" not in st.session_state:
     🌴不動産や相続でお悩みのウチなんちゅを無料サポート！
 
 ⚠️<b> **安心のためのお願い**<b><br>
-名前や電話番号は**チャット内に入力せず**、匿名で安心してご相談してください！<br>
+名前や電話番号は**チャット内に入力せず**、匿名で安心してご相談してください！"""
     st.session_state.messages = [{"role": "assistant", "content": welcome_text}]
     st.session_state.current_stage = "initial"
 
