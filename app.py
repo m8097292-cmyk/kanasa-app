@@ -172,7 +172,7 @@ st.markdown("""
     <div class="main-title-container">
         <p class="top-sub-title">完全無料の不動産相談窓口</p>
         <p class="top-sub-title">相続・売買・不動産活用</p>
-        <div class="main-logo">KANASA</div>
+        <div class="main-logo">おきマド</div>
         <p class="catch-phrase">〜 不動産の分からないをサポート 〜</p>
         <p class="sub-text">匿名で安心🌞名前や住所の入力不要</p>
         <p class="sub-text">営業電話は一切なし</p>
