@@ -170,11 +170,11 @@ st.markdown("""
 # 🌴 ヘッダー部分（自動折り返し＆文字サイズレスポンシブ対応）
 st.markdown("""
     <div class="main-title-container">
-        <p class="top-sub-title">匿名で安心 🌴 不動産相談窓口</p>
-        <p class="top-sub-title">相続や売買・賃貸など不動産全般</p>
+        <p class="top-sub-title">完全無料の不動産相談窓口</p>
+        <p class="top-sub-title">相続・売買・不動産活用</p>
         <div class="main-logo">KANASA</div>
-        <p class="catch-phrase">〜 悩みに寄り添いサポート 〜</p>
-        <p class="sub-text">名前や住所の入力不要</p>
+        <p class="catch-phrase">〜 不動産の分からないをサポート 〜</p>
+        <p class="sub-text">匿名で安心🌞名前や住所の入力不要</p>
         <p class="sub-text">営業電話は一切なし</p>
         <p class="sub-text">あなたと地元のサポート企業を繋ぐパートナー</p>
         <p class="sub-text">お悩みはAIカナサに気軽に相談</p>
