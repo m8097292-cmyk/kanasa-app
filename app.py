@@ -172,7 +172,7 @@ st.markdown("""
 # 🌴 ヘッダー部分（自動折り返し＆文字サイズレスポンシブ対応）
 st.markdown("""
     <div class="main-title-container">
-        <p class="top-sub-title">完全無料の不動産相談窓口</p>
+        <p class="top-sub-title">完全無料の不動産相談サイト</p>
         <p class="top-sub-title">相続・売買・不動産活用</p>
         <div class="main-logo">Okisapo+</div>
         <p class="catch-phrase">〜 おきサポプラス 〜</p>
